@@ -6,20 +6,11 @@ Status::Status(const string _text) : text(_text)
 	time(&uploadTime);
 }
 
-Status::Status(const Status& stat)
-{
-	setText(stat.text);
-	uploadTime = stat.uploadTime;
-}
-
-void Status::setText(const string _text)
-{
-	text = _text;
-}
-
 void Status::printStatus()const
 {
 	cout << ctime(&uploadTime);
+	cout << "Black & white text color\n";
 	cout << "------------------------\n";
 	cout << text << endl;
+	cout << "\n";
 }

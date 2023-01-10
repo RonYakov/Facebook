@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include"status.h"
+#include "statusFactory.h"
 #include <vector>
 #include <string>
 
@@ -34,7 +34,7 @@ public:
 	//-------------------------------------------------------------------
 	
 	void addFollower(Member* newFollower);//The function add follower into followers vector
-	bool addPost(const string _text);//The function gets a string, allocate a new post and add it to posts vector
+	void addPost(char type, string text, string nameOfFile = "\0", int color = 1);//The function gets a string, allocate a new post and add it to posts vector
 
 	bool isMemberAFollower(const Member* member); //The function return true if member is a follower or false otherwise
 

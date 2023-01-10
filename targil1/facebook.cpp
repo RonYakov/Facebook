@@ -13,23 +13,23 @@ void Facebook::startFacebook()
 	facebookMembers.push_back(new Member("Ron Yakov", 14, 3, 1999));
 	facebookMembers.push_back(new Member("Ziv Cohen", 16, 5, 1995));
 
-	facebookMembers[0]->addPost("My name is Ido");
-	facebookMembers[0]->addPost("I Live in Rosh Ha'ain");
-	facebookMembers[1]->addPost("My name is Ron");
-	facebookMembers[1]->addPost("I Live in Ramat Gan");
-	facebookMembers[2]->addPost("My name is Ziv");
-	facebookMembers[2]->addPost("I Live in Tel Aviv");
+	facebookMembers[0]->addPost('T', "My name is Ido");
+	facebookMembers[0]->addPost('T', "I Live in Rosh Ha'ain");
+	facebookMembers[1]->addPost('T', "My name is Ron");
+	facebookMembers[1]->addPost('T', "I Live in Ramat Gan");
+	facebookMembers[2]->addPost('T', "My name is Ziv");
+	facebookMembers[2]->addPost('T', "I Live in Tel Aviv");
 
 	facebookPages.push_back(new Page("9GAG"));
 	facebookPages.push_back(new Page("Hapshuta"));
 	facebookPages.push_back(new Page("LiverpoolFC"));
 
-	facebookPages[0]->addPost("It's 9GAG");
-	facebookPages[0]->addPost("We are here to make you laugh");
-	facebookPages[1]->addPost("It's Hapshuta");
-	facebookPages[1]->addPost("I love Talia");
-	facebookPages[2]->addPost("It's LiverpoolFC");
-	facebookPages[2]->addPost("Mo Salash the egyptian king");
+	facebookPages[0]->addPost('T', "It's 9GAG");
+	facebookPages[0]->addPost('T', "We are here to make you laugh");
+	facebookPages[1]->addPost('T', "It's Hapshuta");
+	facebookPages[1]->addPost('T', "I love Talia");
+	facebookPages[2]->addPost('T', "It's LiverpoolFC");
+	facebookPages[2]->addPost('T', "Mo Salash the egyptian king");
 
 	facebookMembers[0]->addFriend(facebookMembers[1], true);
 	facebookMembers[0]->addFriend(facebookMembers[2], true);
@@ -152,7 +152,7 @@ void Facebook::addMemberToFacebook()
 	try {
 		findAMember(name, false);
 	}
-	catch(findAMemberException& ex)
+	catch(exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -168,19 +168,9 @@ void Facebook::addMemberToFacebook()
 		Date birthday(day, month, year);
 	}
 
-	catch(DateDayException& exDay)
+	catch(exception& ex)
 	{
-		cout << exDay.what();
-		return;
-	}
-	catch (DateMonthException& exMonth)
-	{
-		cout << exMonth.what();
-		return;
-	}
-	catch (DateYearException& exYear)
-	{
-		cout << exYear.what();
+		cout << ex.what();
 		return;
 	}
 
@@ -210,7 +200,7 @@ void Facebook::addPageToFacebook()
 	try {
 		findAPage(name, false);
 	}
-	catch (findAPageException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -246,9 +236,9 @@ void Facebook::CheckMemberOrPage(char& memberOrPage)
 
 void Facebook::addPostToPageOrMember()
 {
-	char PageOrMember;
-	string name, text;
-	int ind;
+	char PageOrMember, statusType;
+	string name, text, fileName;
+	int ind, color;
 
 	cout << "03 - Add a new status to a member / fan page: \n\n";
 	
@@ -262,21 +252,31 @@ void Facebook::addPostToPageOrMember()
 		{
 			ind = findAMember(name);
 		}
-		catch(notFindAMemberException& ex)
+		catch(exception& ex)
 		{
 			cout << ex.what();
 			return;
 		}
 
-		cout << "please enter your text here:\n";
+		try {
+			getStatusType(statusType, fileName, color);
+		}
+
+		catch (exception& ex)
+		{
+			cout << ex.what();
+			return;
+		}
+
+		cout << "Please enter your text here: \n";
 		getline(cin, text);
 
 		try
 		{
-			facebookMembers[ind]->addPost(text);
+			facebookMembers[ind]->addPost(statusType, text, fileName, color);
 		}
 
-		catch (addPostToMemeberException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -289,7 +289,7 @@ void Facebook::addPostToPageOrMember()
 		{
 			ind = findAPage(name);
 		}
-		catch (notFindAPageException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -300,9 +300,9 @@ void Facebook::addPostToPageOrMember()
 
 		try 
 		{
-			facebookPages[ind]->addPost(text);
+			facebookPages[ind]->addPost(statusType, text, fileName, color);
 		}
-		catch (addPostToPageException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -310,6 +310,30 @@ void Facebook::addPostToPageOrMember()
 	}
 
 	cout << "\n\n";
+}
+
+void Facebook::getStatusType(char& type, string& fileName, int& color)
+{
+	cout << "Please enter the character according to type of status: \n";
+	cout << "T - text\nI - image\nV - video\n";
+	cin >> type;
+
+	if (type == 'I' || type == 'V')
+	{
+		cout << "Please enter the file's name: ";
+		cin >> fileName;
+		cout << "For Black & White color press 0, else press 1: ";
+		cin >> color;
+
+		cout << "\n\n";
+	}
+
+	else if (type != 'T')
+	{
+		throw typeForStatusException();
+	}
+
+	clearBuffer();
 }
 
 int Facebook::findAMember(const string name, bool WantToFind)
@@ -369,7 +393,7 @@ void Facebook::presentAllPostsOfMemberOrPage()
 			index = findAMember(name);
 		}
 
-		catch (notFindAMemberException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -383,7 +407,7 @@ void Facebook::presentAllPostsOfMemberOrPage()
 			index = findAPage(name);
 		}
 
-		catch (notFindAPageException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -409,7 +433,7 @@ void Facebook::presentLastTenPostsOfMemberFriends()
 	{
 		ind = findAMember(name);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -434,7 +458,7 @@ void Facebook::makeANewFriendship()
 	{
 		index1 = findAMember(name1);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -447,7 +471,7 @@ void Facebook::makeANewFriendship()
 	{
 		index2 = findAMember(name2);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -457,7 +481,7 @@ void Facebook::makeANewFriendship()
 	{
 		checkIfNamesEqual(name1, name2);
 	}
-	catch (IsNameTheSameException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -467,7 +491,7 @@ void Facebook::makeANewFriendship()
 	{
 		*facebookMembers[index1] += *facebookMembers[index2];
 	}
-	catch (addFriendException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -489,7 +513,7 @@ void Facebook::unfriendship()
 	{
 		index1 = findAMember(name1);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -502,7 +526,7 @@ void Facebook::unfriendship()
 	{
 		index2 = findAMember(name2);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -512,7 +536,7 @@ void Facebook::unfriendship()
 	{
 		checkIfNamesEqual(name1, name2);
 	}
-	catch (IsNameTheSameException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -522,7 +546,7 @@ void Facebook::unfriendship()
 	{
 		facebookMembers[index1]->removeFriend(facebookMembers[index2], true);
 	}
-	catch (removeFriendException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -549,7 +573,7 @@ void Facebook::followAFanPage()
 	{
 		index1 = findAMember(name1);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -561,7 +585,7 @@ void Facebook::followAFanPage()
 	{
 		index2 = findAPage(name2);
 	}
-	catch (notFindAPageException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -571,7 +595,7 @@ void Facebook::followAFanPage()
 		*facebookMembers[index1] += *facebookPages[index2];
 	}
 
-	catch (addPageException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 	}
@@ -592,7 +616,7 @@ void Facebook::unfollowAFanPage()
 	{
 		index1 = findAMember(name1);
 	}
-	catch (notFindAMemberException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -604,7 +628,7 @@ void Facebook::unfollowAFanPage()
 	{
 		index2 = findAPage(name2);
 	}
-	catch (notFindAPageException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 		return;
@@ -614,7 +638,7 @@ void Facebook::unfollowAFanPage()
 		facebookMembers[index1]->removePage(facebookPages[index2]);
 	}
 
-	catch (removePageException& ex)
+	catch (exception& ex)
 	{
 		cout << ex.what();
 	}
@@ -642,7 +666,7 @@ void Facebook::presentAllFriendsOrFollowers()
 			index = findAMember(name);
 		}
 
-		catch (notFindAMemberException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -656,7 +680,7 @@ void Facebook::presentAllFriendsOrFollowers()
 			index = findAPage(name);
 		}
 
-		catch (notFindAPageException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -740,7 +764,7 @@ void Facebook::checkWhoIsMorePopular()
 		{
 			ind1 = findAMember(name1);
 		}
-		catch (notFindAMemberException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -752,7 +776,7 @@ void Facebook::checkWhoIsMorePopular()
 		{
 			ind1 = findAPage(name1);
 		}
-		catch (notFindAPageException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -770,7 +794,7 @@ void Facebook::checkWhoIsMorePopular()
 		{
 			ind2 = findAMember(name2);
 		}
-		catch (notFindAMemberException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;
@@ -782,7 +806,7 @@ void Facebook::checkWhoIsMorePopular()
 		{
 			ind2 = findAPage(name2);
 		}
-		catch (notFindAPageException& ex)
+		catch (exception& ex)
 		{
 			cout << ex.what();
 			return;

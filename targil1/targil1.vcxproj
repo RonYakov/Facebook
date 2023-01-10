@@ -141,17 +141,23 @@
   <ItemGroup>
     <ClCompile Include="date.cpp" />
     <ClCompile Include="facebook.cpp" />
+    <ClCompile Include="imgStatus.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="member.cpp" />
     <ClCompile Include="page.cpp" />
     <ClCompile Include="status.cpp" />
+    <ClCompile Include="statusFactory.cpp" />
+    <ClCompile Include="videoStatus.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="date.h" />
     <ClInclude Include="facebook.h" />
+    <ClInclude Include="imgStatus.h" />
     <ClInclude Include="member.h" />
     <ClInclude Include="page.h" />
     <ClInclude Include="status.h" />
+    <ClInclude Include="statusFactory.h" />
+    <ClInclude Include="videoStatus.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

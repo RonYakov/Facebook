@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 #include "date.h"
-#include"status.h"
+#include"statusFactory.h"
 #include <vector>
 #include <string>
 
@@ -37,7 +37,7 @@ public:
 	//-------------------------------------------------------------------
 
 	void addFriend(Member* newMember, bool isFirst);//The function add member into friends vector
-	void addPost(const string _text);//The function gets a string, allocate a new post and add it into posts vector
+	void addPost(char type, string text, string nameOfFile = "\0", int color = 1);//The function gets a string, allocate a new post and add it into posts vector
 	void addPage(Page* newPage);//The function add page into page vector
 
 	bool isMemberAFriend(const Member* member); //The function return true if member is a friend or false otherwise

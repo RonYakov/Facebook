@@ -10,36 +10,36 @@ using namespace std;
 
 class Status
 {
-	string text;
 	time_t uploadTime;
 
+protected:
+	string text;
 public:
 	//cto'r
-	Status(const Status& stat);
+//	Status(const Status& stat);
 	Status(const string _text);
 
 	//-------------------------------------------------------------------
 
-	void setText(const string _text);//The function sets the status text
 
 	//-------------------------------------------------------------------
 
-	const string gesStatus() const { return text; }//The function return the whole status
+	const string getStatus() const { return text; }//The function return the whole status
 
 	//-------------------------------------------------------------------
 
-	void printStatus()const;//The function prints the status
+	virtual void printStatus() const;//The function prints the status
 
 	//-------------------------------------------------------------------
 
 	//distractor
-	~Status() {}
+	virtual ~Status() {}
 
-	bool operator==(const Status& other) const
+	virtual bool operator==(Status& other) const
 	{
 		return (this->text == other.text);
 	}
-	bool operator!=(const Status& other) const
+	virtual bool operator!=(Status& other) const
 	{
 		return (this->text != other.text);
 	}

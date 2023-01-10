@@ -7,7 +7,7 @@ using namespace std;
 
 void main()
 {
-	Facebook facebook; //ghghghg
+	Facebook facebook; 
 
 	Status st1("Test 1"), st2("Test 1"), st3("Test 2");
 
@@ -15,18 +15,18 @@ void main()
 	cout << "Hard coded test to opertor == and != of class status\n\n";
 	if (st1 == st2)
 	{
-		cout << st1.gesStatus() << " is the same as " << st2.gesStatus() << endl;
+		cout << st1.getStatus() << " is the same as " << st2.getStatus() << endl;
 	}
 	if (st1 != st2)
 	{
-		cout << st1.gesStatus() << " is different than " << st2.gesStatus() << endl;
+		cout << st1.getStatus() << " is different than " << st2.getStatus() << endl;
 	}
 	if (st1 == st3)
 	{
-		cout << st1.gesStatus() << " is the same as " << st3.gesStatus() << endl;
+		cout << st1.getStatus() << " is the same as " << st3.getStatus() << endl;
 	}
 	if (st1 != st3)
 	{
-		cout << st1.gesStatus() << " is different than " << st3.gesStatus() << endl;
+		cout << st1.getStatus() << " is different than " << st3.getStatus() << endl;
 	}
 }

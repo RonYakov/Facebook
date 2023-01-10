@@ -97,6 +97,22 @@ public:
 	}
 };
 
+class typeForStatusException : public exception
+{
+	string excep;
+
+public:
+	typeForStatusException()
+	{
+		excep = "Invalid type input\n\n";
+	}
+
+	const char* what() const
+	{
+		return excep.c_str();
+	}
+};
+
 class Facebook
 {
 	vector<Member*> facebookMembers;
@@ -134,6 +150,8 @@ private:
 	void checkIfNamesEqual(string name1, string name2);//The function gets two strings and checks if they are equal
 
 	void getNameFromUser(string& name, char pageOrMember, bool isFirst = true);//The function gets a name from the user
+
+	void getStatusType(char& type, string& fileName, int& color);
 
 	//Prints facebook info
 	void printAllArr();

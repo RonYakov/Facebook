@@ -55,9 +55,9 @@ bool Member::isAlreadyAFollower(const Page* page)
 	return false;
 }
 
-void Member::addPost(const string _text)
+void Member::addPost(char type, string text, string nameOfFile, int color)
 {
-	Status* newStat = new Status(_text);
+	Status* newStat = StatusFactory::createNewStatus(type, text, nameOfFile, color);
 
 	if (newStat != nullptr)
 		posts.push_back(newStat);

@@ -21,9 +21,9 @@ bool Page::isMemberAFollower(const Member* member)
 	return true;
 }
 
-bool Page::addPost(const string _text)
+void Page::addPost(char type, string text, string nameOfFile, int color)
 {
-	Status* newStat = new Status(_text);
+	Status* newStat = StatusFactory::createNewStatus(type, text, nameOfFile, color);
 
 	if (newStat != nullptr)
 		posts.push_back(newStat);
