@@ -7,7 +7,7 @@ using namespace std;
 
 void main()
 {
-	Facebook facebook;
+	Facebook facebook; //ghghghg
 
 	Status st1("Test 1"), st2("Test 1"), st3("Test 2");
 
