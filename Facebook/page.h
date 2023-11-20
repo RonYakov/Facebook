@@ -5,7 +5,6 @@
 #include <string>
 
 #pragma warning(disable: 4996)
-
 using std::vector;
 using std::string;
 using std::iterator;
@@ -22,6 +21,10 @@ class Page
 
 public:
 	//cto'r
+	Page(ifstream& facebookFile)
+	{
+		loadFromFile(facebookFile);
+	}
 	Page(const string _name) : name(_name) {}
 	Page(const Page& other) = delete;
 
@@ -49,6 +52,10 @@ public:
 
 	//-------------------------------------------------------------------
 
+	void saveToFile(ofstream& facebookFile); // save data to file
+	void loadFromFile(ifstream& facebookFile);// load data from file
+
+	//-------------------------------------------------------------------
 	bool operator>(const Page& other) const //The function check who has more followers
 	{
 		return (followers.size() > other.followers.size());
@@ -57,6 +64,7 @@ public:
 
 	//distractor
 	~Page();
+
 private:
 
 	//-------------------------------------------------------------------

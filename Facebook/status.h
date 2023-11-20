@@ -2,25 +2,24 @@
 #include <iostream>
 #include<time.h>
 #include <string>
+#include <fstream>
 
+
+#pragma warning(disable: 4996)
 using std::string;
 using namespace std;
 
-#pragma warning(disable: 4996)
-
 class Status
 {
-	time_t uploadTime;
-
 protected:
+	time_t uploadTime;
 	string text;
 public:
 	//cto'r
-//	Status(const Status& stat);
-	Status(const string _text);
-
+	Status(const string _text, time_t _time=0);
 	//-------------------------------------------------------------------
 
+	virtual void saveToFile(ofstream &facebookFile);// save data to file
 
 	//-------------------------------------------------------------------
 

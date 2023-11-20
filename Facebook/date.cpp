@@ -1,7 +1,5 @@
 #include "date.h"
 
-using namespace std;
-
 
 Date::Date(int _day, int _month, int _year)
 {
@@ -19,7 +17,7 @@ Date::Date(int _day, int _month, int _year)
 
 bool  Date::setDay(int _day)
 {
-	if (_day >= 1 && _day <= 31)
+	if (_day >= DAY_MIN && _day <= DAY_MAX)
 	{
 		day = _day;
 		return true;
@@ -29,7 +27,7 @@ bool  Date::setDay(int _day)
 
 bool  Date::setMonth(int _month)
 {
-	if (_month >= 1 && _month <= 12)
+	if (_month >= MONTH_MIN && _month <= MONTH_MAX)
 	{
 		month = _month;
 		return true;
@@ -39,7 +37,7 @@ bool  Date::setMonth(int _month)
 
 bool  Date::setYear(int _year)
 {
-	if (_year >= 1900 && _year <= 2022)
+	if (_year >= YEAR_MIN && _year <= YEAR_MAX)
 	{
 		year = _year;
 		return true;
@@ -50,4 +48,15 @@ bool  Date::setYear(int _year)
 void Date::print()
 {
 	cout << day << "/" << month << "/" << year;
+}
+
+void Date::saveToFile(ofstream& facebookFile)
+{
+	facebookFile << day << " " << month << " " << year << endl;
+}
+
+void Date::loadFromFile(ifstream& facebookFile)
+{
+	char readEnter;
+	facebookFile >> day >>  month >>  year ;
 }

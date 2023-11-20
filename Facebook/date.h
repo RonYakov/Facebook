@@ -1,11 +1,13 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include<fstream>
+
+#pragma warning(disable: 4996)
 
 using std::string;
 using namespace std;
 
-#pragma warning(disable: 4996)
 
 class DateDayException : public exception
 {
@@ -58,6 +60,13 @@ public:
 	}
 };
 
+const int DAY_MIN = 1;
+const int DAY_MAX = 31;
+const int MONTH_MIN = 1;
+const int MONTH_MAX = 12;
+const int YEAR_MIN = 1900;
+const int YEAR_MAX = 2023;
+
 class Date
 {
 	int day;
@@ -66,6 +75,7 @@ class Date
 
 public:
 	//cto'r
+	Date() = default;
 	Date(int _day, int _month, int _year);
 
 	//-------------------------------------------------------------------
@@ -82,6 +92,9 @@ public:
 	int getYear() const { return year; }//The function return the year
 
 	//-------------------------------------------------------------------
+
+	void saveToFile(ofstream& facebookFile); // save data to file
+	void loadFromFile(ifstream& facebookFile); //load data from file
 
 	void print();//The function prints the date
 };

@@ -24,7 +24,6 @@
     <ProjectGuid>{9081190e-6348-4613-8e54-f74bd0a07136}</ProjectGuid>
     <RootNamespace>targil1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Facebook</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

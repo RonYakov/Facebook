@@ -1,7 +1,11 @@
 #include"facebook.h"
+
+using std::vector;
+using std::string;
+using std::iterator;
 using namespace std;
 
-Facebook:: Facebook()
+Facebook::Facebook(string _facebookFile):facebookFile(_facebookFile)
 {
 	startFacebook();
 	menu();
@@ -9,32 +13,7 @@ Facebook:: Facebook()
 
 void Facebook::startFacebook()
 {
-	facebookMembers.push_back(new Member("Ido Hirshman", 22, 11, 1999));
-	facebookMembers.push_back(new Member("Ron Yakov", 14, 3, 1999));
-	facebookMembers.push_back(new Member("Ziv Cohen", 16, 5, 1995));
-
-	facebookMembers[0]->addPost('T', "My name is Ido");
-	facebookMembers[0]->addPost('T', "I Live in Rosh Ha'ain");
-	facebookMembers[1]->addPost('T', "My name is Ron");
-	facebookMembers[1]->addPost('T', "I Live in Ramat Gan");
-	facebookMembers[2]->addPost('T', "My name is Ziv");
-	facebookMembers[2]->addPost('T', "I Live in Tel Aviv");
-
-	facebookPages.push_back(new Page("9GAG"));
-	facebookPages.push_back(new Page("Hapshuta"));
-	facebookPages.push_back(new Page("LiverpoolFC"));
-
-	facebookPages[0]->addPost('T', "It's 9GAG");
-	facebookPages[0]->addPost('T', "We are here to make you laugh");
-	facebookPages[1]->addPost('T', "It's Hapshuta");
-	facebookPages[1]->addPost('T', "I love Talia");
-	facebookPages[2]->addPost('T', "It's LiverpoolFC");
-	facebookPages[2]->addPost('T', "Mo Salash the egyptian king");
-
-	facebookMembers[0]->addFriend(facebookMembers[1], true);
-	facebookMembers[0]->addFriend(facebookMembers[2], true);
-	facebookMembers[1]->addFriend(facebookMembers[2], true);
-	facebookMembers[1]->addPage(facebookPages[2]);
+	loadFromFile();
 }
 
 void Facebook::menu()
@@ -51,57 +30,58 @@ void Facebook::menu()
 
 		switch (currChoise)
 		{
-		case 1:
+		case ADD_MEMBER:
 			addMemberToFacebook();
 			break;
 
-		case 2:
+		case ADD_PAGE:
 			addPageToFacebook();
 			break;
 
-		case 3:
+		case ADD_POST:
 			addPostToPageOrMember();
 			break;
 
-		case 4:
+		case PRESENT_POST:
 			presentAllPostsOfMemberOrPage();
 			break;
 		
-		case 5:
+		case PRESENT_10_POST:
 			presentLastTenPostsOfMemberFriends();
 			break;
 
-		case 6:
+		case FRIENDSHIP:
 			makeANewFriendship();
 			break;
 
-		case 7:
+		case UNFRIENDSHIP:
 			unfriendship();
 			break;
 
-		case 8:
+		case ADD_FOLLOWER:
 			followAFanPage();
 			break;
 
-		case 9:
+		case UNFOLLOW:
 			unfollowAFanPage();
 			break;
 
-		case 10:
+		case PRESENT_ALL_FACE:
 			printAllArr();
 			break;
 
-		case 11:
+		case PRESENT_ALL_MEM:
 			presentAllFriendsOrFollowers();
 			break;
 
-		case 12:
+		case POPULAR:
 			checkWhoIsMorePopular();
 			break;
 
-		case 13:
+		case EXIT:
 			cout << "bye bye :)\n";
 			stop = true;
+			saveToFile();
 			break;
 
 		default:
@@ -113,13 +93,13 @@ void Facebook::menu()
 	}
 }
 
-void Facebook::clearBuffer()
+void Facebook::clearBuffer() const
 {
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
-void Facebook::printMenu()
+void Facebook::printMenu() const
 {
 	cout << "____________________________________________________________\n";
 	cout << "Please Choose the number according to the following options: \n\n";
@@ -220,7 +200,7 @@ void Facebook::addPageToFacebook()
 	cout << "\n\n";
 }
 
-void Facebook::CheckMemberOrPage(char& memberOrPage)
+void Facebook::CheckMemberOrPage(char& memberOrPage) const
 {
 	cout << "For Member please press 0 and for Page press 1:\n";
 	cin >> memberOrPage;
@@ -295,6 +275,16 @@ void Facebook::addPostToPageOrMember()
 			return;
 		}
 
+		try {
+			getStatusType(statusType, fileName, color);
+		}
+
+		catch (exception& ex)
+		{
+			cout << ex.what();
+			return;
+		}
+
 		cout << "please enter your text here:\n";
 		getline(cin, text);
 
@@ -312,7 +302,7 @@ void Facebook::addPostToPageOrMember()
 	cout << "\n\n";
 }
 
-void Facebook::getStatusType(char& type, string& fileName, int& color)
+void Facebook::getStatusType(char& type, string& fileName, int& color) const
 {
 	cout << "Please enter the character according to type of status: \n";
 	cout << "T - text\nI - image\nV - video\n";
@@ -336,7 +326,7 @@ void Facebook::getStatusType(char& type, string& fileName, int& color)
 	clearBuffer();
 }
 
-int Facebook::findAMember(const string name, bool WantToFind)
+int Facebook::findAMember(const string name, bool WantToFind) const
 {
 	for (int i = 0; i < facebookMembers.size(); i++)
 	{
@@ -355,7 +345,7 @@ int Facebook::findAMember(const string name, bool WantToFind)
 		throw notFindAMemberException(name);
 }
 
-int Facebook::findAPage(const string name, bool WantToFind)
+int Facebook::findAPage(const string name, bool WantToFind) const
 {
 	for (int i = 0; i < facebookPages.size(); i++)
 	{
@@ -374,7 +364,7 @@ int Facebook::findAPage(const string name, bool WantToFind)
 		throw notFindAPageException(name);
 }
 
-void Facebook::presentAllPostsOfMemberOrPage()
+void Facebook::presentAllPostsOfMemberOrPage() const
 {
 	char PageOrMember;
 	int index;
@@ -418,7 +408,7 @@ void Facebook::presentAllPostsOfMemberOrPage()
 	cout << "\n\n";
 }
 
-void Facebook::presentLastTenPostsOfMemberFriends()
+void Facebook::presentLastTenPostsOfMemberFriends() const
 {
 	char PageOrMember;
 	int ind;
@@ -555,7 +545,7 @@ void Facebook::unfriendship()
 	cout << "\n\n";
 }
 
-void Facebook::checkIfNamesEqual(string name1, string name2)
+void Facebook::checkIfNamesEqual(string name1, string name2) const
 {
 	if (name1 == name2)
 		throw IsNameTheSameException(name1);
@@ -646,7 +636,7 @@ void Facebook::unfollowAFanPage()
 	cout << "\n\n";
 }
 
-void Facebook::presentAllFriendsOrFollowers()
+void Facebook::presentAllFriendsOrFollowers() const
 {
 	char PageOrMember;
 	int index;
@@ -691,7 +681,7 @@ void Facebook::presentAllFriendsOrFollowers()
 	cout << "\n\n";
 }
 
-void Facebook::getNameFromUser(string& name,char pageOrMember, bool isFirst)
+void Facebook::getNameFromUser(string& name,char pageOrMember, bool isFirst) const
 {
 	if (pageOrMember == '0')
 	{
@@ -712,13 +702,13 @@ void Facebook::getNameFromUser(string& name,char pageOrMember, bool isFirst)
 	cout << "\n" <<endl;
 }
 
-void Facebook::printAllArr()
+void Facebook::printAllArr() const
 {
 	printMembersArr();
 	printPagesArr();
 }
 
-void Facebook::printPagesArr()
+void Facebook::printPagesArr() const
 {
 	cout << "---Facebook Pages List---\n\n";
 	cout << "index | Name \n";
@@ -732,7 +722,7 @@ void Facebook::printPagesArr()
 	cout << "\n\n";
 }
 
-void Facebook::printMembersArr()
+void Facebook::printMembersArr() const
 {
 	cout << "---Facebook Members List---\n\n";
 	cout << "index | Name \n";
@@ -746,7 +736,7 @@ void Facebook::printMembersArr()
 	cout << "\n\n";
 }
 
-void Facebook::checkWhoIsMorePopular()
+void Facebook::checkWhoIsMorePopular() const
 {
 	char PageOrMember1, PageOrMember2;
 	string name1, name2;
@@ -844,6 +834,86 @@ void Facebook::checkWhoIsMorePopular()
 		else
 			cout << facebookMembers[ind1]->getName() << " is not more popular than " << facebookPages[ind2]->getName() << "\n\n";
 	}
+}
+
+void Facebook::saveToFile()
+{
+	ofstream f_File(facebookFile, ios_base::trunc);
+
+	f_File << facebookPages.size() << endl;
+	for (int i = 0; i < facebookPages.size(); i++)
+	{
+		facebookPages[i]->saveToFile(f_File);
+	}
+	
+
+	f_File << facebookMembers.size() << endl;
+	for (int i = 0; i < facebookMembers.size(); i++)
+	{
+		facebookMembers[i]->saveDataToFile(f_File);
+	}
+
+	for (int i = 0; i < facebookMembers.size(); i++)
+	{
+		facebookMembers[i]->saveFriendsAndFollowersToFile(f_File);
+	}
+	
+	f_File.close();
+}
+
+void Facebook::loadFromFile()
+{
+	int pagesSize, membersSize;
+	char readEnter;
+	ifstream f_File(facebookFile, ios_base::in);
+
+	f_File >> pagesSize;
+	for (int i = 0; i < pagesSize; i++)
+	{
+		facebookPages.push_back(new Page(f_File));
+	}
+
+	f_File >> membersSize;
+	for (int i = 0; i < membersSize; i++)
+	{
+		facebookMembers.push_back(new Member(f_File));
+	}
+
+	loadFriendshipsFromFile(f_File);
+
+	f_File.close();
+}
+
+void Facebook::loadFriendshipsFromFile(ifstream& f_File)
+{
+	int currPageSize, currFriendSize;
+	string currName;
+	string readEnter;
+
+	for (int i = 0; i < facebookMembers.size(); i++)
+	{
+		f_File >> currPageSize;
+
+		getline(f_File, readEnter);
+
+		for (int j = 0; j < currPageSize; j++)
+		{
+			getline(f_File, currName);
+			*facebookMembers[i] += *facebookPages[findAPage(currName)]; // There is no need to check exception
+		}
+
+		f_File >> currFriendSize;
+
+		getline(f_File, readEnter);
+
+		for (int j = 0; j < currFriendSize; j++)
+		{
+			getline(f_File, currName);
+			*facebookMembers[i] += *facebookMembers[findAMember(currName)]; // There is no need to check exception
+		}
+
+	}
+
 }
 
 Facebook::~Facebook()

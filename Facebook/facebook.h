@@ -7,11 +7,6 @@
 
 #pragma warning(disable: 4996)
 
-using std::vector;
-using std::string;
-using std::iterator;
-using namespace std;
-
 class notFindAMemberException : public exception
 {
 	string excep;
@@ -113,14 +108,21 @@ public:
 	}
 };
 
+enum{ 
+	ADD_MEMBER = 1, ADD_PAGE = 2, ADD_POST = 3, PRESENT_POST = 4,
+	PRESENT_10_POST = 5, FRIENDSHIP = 6, UNFRIENDSHIP = 7, ADD_FOLLOWER = 8,
+	UNFOLLOW = 9, PRESENT_ALL_FACE = 10, PRESENT_ALL_MEM = 11, POPULAR = 12,
+	EXIT = 13
+};
+
 class Facebook
 {
 	vector<Member*> facebookMembers;
 	vector<Page*> facebookPages;
-
+	string facebookFile;
 public:
 	//c'tor
-	Facebook();
+	Facebook(string _facebookFile);
 	Facebook(const Facebook& other) = delete;
 
 	void menu();//The function run facebook menu
@@ -130,38 +132,42 @@ public:
 private:
 	void startFacebook();//The function put default info in facebook system
 
-	void printMenu();//The function prints facebook menu
+	void printMenu() const;//The function prints facebook menu
 
-	void clearBuffer();//The function clear the buffer
-	void CheckMemberOrPage(char& memberOrPage);//The function checks if the user want member or page
+	void clearBuffer() const;//The function clear the buffer
+	void CheckMemberOrPage(char& memberOrPage) const;//The function checks if the user want member or page
 
 	void addMemberToFacebook();//The function add member to facebook
 	void addPageToFacebook();//The function add page to facebook
 	void addPostToPageOrMember();//The function add post to page/member
-	void presentAllPostsOfMemberOrPage();//The function present all posts of member/page
-	void presentLastTenPostsOfMemberFriends();//The function present last ten posts of member/page
+	void presentAllPostsOfMemberOrPage() const;//The function present all posts of member/page
+	void presentLastTenPostsOfMemberFriends() const;//The function present last ten posts of member/page
 	void makeANewFriendship();//The function make a new facebook friendship
 	void unfriendship();//The function unfriend two facebook's member
 	void followAFanPage();//The function make a member follow a facebook page
 	void unfollowAFanPage();//The function unfollow a members to facebook page
-	void presentAllFriendsOrFollowers();//The function present all friends of a member / followeres of a page
-	void checkWhoIsMorePopular();//The function checks who is more popular in Facebook
+	void presentAllFriendsOrFollowers() const;//The function present all friends of a member / followeres of a page
+	void checkWhoIsMorePopular() const;//The function checks who is more popular in Facebook
 
-	void checkIfNamesEqual(string name1, string name2);//The function gets two strings and checks if they are equal
+	void checkIfNamesEqual(string name1, string name2) const;//The function gets two strings and checks if they are equal
 
-	void getNameFromUser(string& name, char pageOrMember, bool isFirst = true);//The function gets a name from the user
+	void getNameFromUser(string& name, char pageOrMember, bool isFirst = true) const;//The function gets a name from the user
 
-	void getStatusType(char& type, string& fileName, int& color);
+	void getStatusType(char& type, string& fileName, int& color) const;
 
 	//Prints facebook info
-	void printAllArr();
-	void printPagesArr();
-	void printMembersArr();
+	void printAllArr() const;
+	void printPagesArr() const;
+	void printMembersArr() const;
+
+	void saveToFile();//save data to file
+	void loadFromFile();//load data from file
+	void loadFriendshipsFromFile(ifstream& f_File);
 
 	//Delete facebook info
 	void deleteFacebookMembersArray();
 	void deleteFacebookPagesArray();
 
-	int findAMember(const string name, bool WantToFind = true);//The function try to find a facebook member according to the name
-	int findAPage(const string name, bool WantToFind = true);//The function try to find a facebook page according to the name
+	int findAMember(const string name, bool WantToFind = true) const;//The function try to find a facebook member according to the name
+	int findAPage(const string name, bool WantToFind = true) const;//The function try to find a facebook page according to the name
 };

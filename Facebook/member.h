@@ -12,6 +12,7 @@ using std::string;
 using std::iterator;
 using namespace std;
 
+
 class Page;
 
 class Member
@@ -25,6 +26,10 @@ class Member
 
 public:
 	//cto'r
+	Member(ifstream& facebookFile)
+	{
+		loadDataFromFile(facebookFile);
+	}
 	Member(const string _name, int day, int month, int year) :name(_name), birthday(day, month, year) {}
 	Member(const Member& other) = delete;
 
@@ -33,6 +38,12 @@ public:
 	const string getName()const { return name; }//The function return the member's name
 	const Date* getDate() const { return birthday.getDate(); }//The function return the member's birth day
 	const vector<Member*> getFriends() const { return friends; } //The function return the members friends vector
+
+	//-------------------------------------------------------------------
+
+	void saveDataToFile(ofstream& facebookFile);
+	void saveFriendsAndFollowersToFile(ofstream& facebookFile);
+	void loadDataFromFile(ifstream& facebookFile);
 
 	//-------------------------------------------------------------------
 

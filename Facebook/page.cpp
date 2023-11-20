@@ -1,6 +1,6 @@
 #include"page.h"
 #include"member.h"
-using namespace std;
+
 
 bool Page::operator>(const Member& other) const
 {
@@ -23,7 +23,7 @@ bool Page::isMemberAFollower(const Member* member)
 
 void Page::addPost(char type, string text, string nameOfFile, int color)
 {
-	Status* newStat = StatusFactory::createNewStatus(type, text, nameOfFile, color);
+	Status* newStat = StatusFactory::createNewStatus(type, text,0, nameOfFile, color);
 
 	if (newStat != nullptr)
 		posts.push_back(newStat);
@@ -78,6 +78,33 @@ void Page::printFollowers()const
 			printf("%6d", i);
 			cout << "| " << followers[i]->getName() << endl;
 		}
+	}
+}
+
+void Page::saveToFile(ofstream& facebookFile)
+{
+	facebookFile << name << endl;
+	facebookFile << posts.size() << endl;
+	for (int i = 0; i < posts.size(); i++)
+	{
+		posts[i]->saveToFile(facebookFile);
+	}
+
+	//The facebook members will save which page they follow
+}
+
+void Page::loadFromFile(ifstream& facebookFile)
+{
+	int postSize;
+	string getEnter;
+	
+	getline(facebookFile, getEnter);
+	getline(facebookFile, name);
+	facebookFile >> postSize;
+
+	for (int i = 0; i < postSize; i++)
+	{
+		posts.push_back(StatusFactory::loadFromFile(facebookFile));
 	}
 }
 

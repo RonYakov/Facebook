@@ -3,14 +3,21 @@
 #include "status.h"
 #include "videoStatus.h"
 #include "imgStatus.h"
+#include<sstream>
+#include<iomanip>
+#include<chrono>
 
 class StatusFactory {
 public:
 
 	//The class that uses this function must delete the dynamic allocation
-	static Status* createNewStatus(char type, string text, string nameOfFile = "\0", int color = 1);
+	static Status* createNewStatus(char type, string text, time_t time = 0, string nameOfFile = "\0", int color = 1);
 
+	//load data from file
+	static Status* loadFromFile(ifstream& facebookFile);
 };
+
+
 
 class colorForStatusException : public exception
 {

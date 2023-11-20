@@ -1,8 +1,6 @@
 #include"member.h"
 #include"page.h"
 
-using namespace std;
-
 bool Member::operator>(const Page& other) const
 {
 	return (friends.size() > other.getNumOfFollowers());
@@ -57,7 +55,7 @@ bool Member::isAlreadyAFollower(const Page* page)
 
 void Member::addPost(char type, string text, string nameOfFile, int color)
 {
-	Status* newStat = StatusFactory::createNewStatus(type, text, nameOfFile, color);
+	Status* newStat = StatusFactory::createNewStatus(type, text,0, nameOfFile, color);
 
 	if (newStat != nullptr)
 		posts.push_back(newStat);
@@ -192,6 +190,58 @@ void Member::printPages()const
 			printf("%6d", i);
 			cout << "| " << pages[i]->getName() << endl;
 		}
+	}
+}
+
+void Member::saveDataToFile(ofstream& facebookFile)
+{
+	facebookFile << name << endl;
+	birthday.saveToFile(facebookFile);
+	facebookFile << posts.size() << endl;
+	for (int i = 0; i < posts.size(); i++)
+	{
+		posts[i]->saveToFile(facebookFile);
+	}
+}
+
+void Member::saveFriendsAndFollowersToFile(ofstream& facebookFile)
+{
+	facebookFile << pages.size() << endl;
+	for (int i = 0; i < pages.size(); i++)
+	{
+		facebookFile << pages[i]->getName() << endl;
+	}
+	facebookFile << endl;
+
+	int initialFriendSize = friends.size();
+	facebookFile << friends.size() << endl;
+	for (int i = 0; i < initialFriendSize; i++)
+	{
+		facebookFile << friends[0]->getName() << endl;
+
+		//This function will take place before the dtor, thats why its ok to use remove here
+		//avoids double writing of friendship to the file
+		removeFriend(friends[0], true);
+	}
+	facebookFile << endl;
+
+	//The facebook members will save which page they follow
+}
+
+void Member::loadDataFromFile(ifstream& facebookFile)
+{
+	int postSize;
+	string getEnter;
+
+	getline(facebookFile, getEnter);
+	getline(facebookFile, name);
+
+	birthday.loadFromFile(facebookFile);
+	facebookFile >> postSize;
+
+	for (int i = 0; i < postSize; i++)
+	{
+		posts.push_back(StatusFactory::loadFromFile(facebookFile));
 	}
 }
 
